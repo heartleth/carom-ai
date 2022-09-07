@@ -37,3 +37,11 @@ onload = onresize = e => {
 document.getElementById('dragok').onclick = e =>{
     drag = document.getElementById('drag').value;
 };
+
+document.getElementById('rngra').onmouseup = e =>{
+    radius = document.getElementById('rngra').value;
+};
+
+document.getElementById('rngfp').onmouseup = e =>{
+    fp = parseInt(document.getElementById('rngfp').value);
+};

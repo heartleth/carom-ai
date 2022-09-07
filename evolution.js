@@ -123,6 +123,8 @@ let adams = [];
 
 setInterval(() => {
     if (act >= actdur) {
+        act = 0;
+        
         let dl = world.map((e, i)=>[e, i]).filter(e=>e[0].alive==true).map((a)=>a[1]);
         bests = bests.filter(e => !dl.includes(e)).concat(dl);
         if (dl.length == 0) {
@@ -147,7 +149,6 @@ setInterval(() => {
         
         output.innerText = last.join(' ') + '\nSUP ' + bests.join(' ') + `\nSUCCEEDING ${adams.join(' ')}\n# GEN ${gen} \n` + `# SCORE ${acacts}`;
         world.filter((e, i)=>last.includes(i)).forEach(e=>e.shoot());
-        act = 0;
         acacts += 1;
     }
     else {
