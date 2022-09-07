@@ -1,7 +1,24 @@
-function getRandomInt(min, max) {
+function getRandomInt(min, max, p=2) {
+    if (p==1){
+        let r = Math.random();
+        if (r <= 0.7) {
+            return 2;
+        }
+        else if (r = 0.85) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
+}
+
+function emitsound(n) {
+    let a = document.getElementById(n);
+    a.play();
 }
 
 class Entity {
@@ -20,8 +37,8 @@ class Entity {
     
     tick() {
         for (let i = 0; i < 3; i++) {
-            this.ballcoords[i][0] += this.velocity[i][0] / 16;
-            this.ballcoords[i][1] += this.velocity[i][1] / 16;
+            this.ballcoords[i][0] += this.velocity[i][0] * fp / 16;
+            this.ballcoords[i][1] += this.velocity[i][1] * fp / 16;
             if (Math.abs(this.ballcoords[i][0]) >= 150 - radius) {
                 this.ballcoords[i][0] = Math.sign(this.ballcoords[i][0]) * (150 - radius);
                 this.velocity[i][0] *= -1
@@ -30,12 +47,13 @@ class Entity {
                 this.ballcoords[i][1] = Math.sign(this.ballcoords[i][1]) * (300 - radius);
                 this.velocity[i][1] *= -1
             }
-            this.velocity[i][0] *= drag;
-            this.velocity[i][1] *= drag;
+            this.velocity[i][0] *= Math.pow(drag, fp);
+            this.velocity[i][1] *= Math.pow(drag, fp);
 
             for (let j = 0; j < 3; j++) {
                 if (i != j) {
                     if (pythagorean(this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]) <= radius * 2){
+                        // emitsound(this.nth % 10);
                         if (i == 0) {
                             if (this.alive == 9 - 3 * j) {
                                 this.alive = true;
@@ -65,8 +83,11 @@ class Entity {
     shoot() {
         this.life.input_values(this.ballcoords[0].concat(this.ballcoords[1]).concat(this.ballcoords[2]));
         this.life.evaluate();
-        let out = this.life.most_output();
-        let theta = out * 10 / Math.PI;
+        // let out = this.life.most_output();
+        // let theta = out * 5 / Math.PI;
+        let out = this.life.binangle();
+        let theta = out * (2 * 3.1415926535897932 / 256);
+        
         this.velocity[0][0] -= 100 * Math.sin(theta);
         this.velocity[0][1] += 100 * Math.cos(theta);
         this.alive = false;
@@ -78,7 +99,7 @@ class Entity {
 }
 
 const worldsize = 128;
-let world = Array.from({ length: worldsize }, () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([36, 8])]));
+let world = Array.from({ length: worldsize }, () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]));
 
 for (let n = 0; n < worldsize; n++) {
     world[n].nth = n;
@@ -91,7 +112,7 @@ let acacts = 0;
 let bests = Array.from({ length: worldsize }, (_, b) => b);
 
 function randombetween(a) {
-    return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length)][i]));
+    return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
 }
 
 function randombetweenw(ad) {
@@ -109,12 +130,12 @@ setInterval(() => {
             let adam = bests.slice(worldsize - 3).map(e=>world[e]);
             adams = bests.slice(worldsize - 3);
             
-            let childs = Array.from({ length: worldsize - 2 }, () => new Entity([
+            let childs = Array.from({ length: worldsize - mutations }, () => new Entity([
                 randombetweenw(adam.map(e=>e.weights[0])),
                 randombetweenw(adam.map(e=>e.weights[1])),
                 randombetweenw(adam.map(e=>e.weights[2]))
             ]));
-            world = [new Entity([rrandomw([20, 6]), rrandomw([20, 20]), rrandomw([36, 20])]), new Entity([rrandomw([20, 6]), rrandomw([20, 20]), rrandomw([36, 20])])];
+            world = Array.from({ length: mutations }, () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]));
             world = world.concat(childs);
             for (let n = 0; n < worldsize; n++) {
                 world[n].nth = n;
@@ -138,5 +159,5 @@ setInterval(() => {
         world.filter((e, i)=>last.includes(i)).forEach(e => e.tick());
         world.filter((e, i)=>last.includes(i)).forEach(e => e.render());
     }
-    act += 1;
+    act += fp;
 }, 1);

@@ -5,10 +5,12 @@ let centers = [0, 0];
 let ballcoords = [[0, -100], [20, 10], [-20, 10]];
 let velocity = [[0, 0], [0, 0], [0, 0]];
 
-const zoom = 1;
-const radius = 8;
-const drag = 0.9975;
-const actdur = 1800;
+let fp = 1;
+let zoom = 1;
+let radius = 12;
+let drag = 0.9975;
+let actdur = 1500;
+let mutations = 5;
 
 onload = onresize = e => {
     canvas.height = window.innerHeight - 8;
@@ -31,3 +33,7 @@ onload = onresize = e => {
 
     render(ctx);
 }
+
+document.getElementById('dragok').onclick = e =>{
+    drag = document.getElementById('drag').value;
+};

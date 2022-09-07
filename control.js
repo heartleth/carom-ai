@@ -24,7 +24,7 @@ let dx, dy;
 // }
 
 function randomw(l) {
-    return Float32Array.from(Array.from({ length: l }, () => (Math.random() - 0.5) * 4));
+    return Float32Array.from(Array.from({ length: l }, () => (Math.random() - 0.5) * 40));
 }
 
 function rrandomw(figure) {
