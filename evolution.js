@@ -122,7 +122,7 @@ function randombetweenw(ad) {
 let adams = [];
 
 setInterval(() => {
-    if (act == actdur) {
+    if (act >= actdur) {
         let dl = world.map((e, i)=>[e, i]).filter(e=>e[0].alive==true).map((a)=>a[1]);
         bests = bests.filter(e => !dl.includes(e)).concat(dl);
         if (dl.length == 0) {
