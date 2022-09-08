@@ -33,6 +33,7 @@ class Entity {
         this.weights = weights;
         this.life = new Life(...this.weights);
         this.alive = true;
+        this.cushion = 0;
     }
     
     tick() {
@@ -42,10 +43,16 @@ class Entity {
             if (Math.abs(this.ballcoords[i][0]) >= 150 - radius) {
                 this.ballcoords[i][0] = Math.sign(this.ballcoords[i][0]) * (150 - radius);
                 this.velocity[i][0] *= -1
+                if (i == 0) {
+                    this.cushion += 1;
+                }
             }
             if (Math.abs(this.ballcoords[i][1]) >= 300 - radius) {
                 this.ballcoords[i][1] = Math.sign(this.ballcoords[i][1]) * (300 - radius);
                 this.velocity[i][1] *= -1
+                if (i == 0) {
+                    this.cushion += 1;
+                }
             }
             this.velocity[i][0] *= Math.pow(drag, fp);
             this.velocity[i][1] *= Math.pow(drag, fp);
@@ -56,7 +63,9 @@ class Entity {
                         // emitsound(this.nth % 10);
                         if (i == 0) {
                             if (this.alive == 9 - 3 * j) {
-                                this.alive = true;
+                                if (this.cushion >= 3) {
+                                    this.alive = true;
+                                }
                             }
                             else if (this.alive == false) {
                                 this.alive = 3 * j;
@@ -91,6 +100,7 @@ class Entity {
         this.velocity[0][0] -= 100 * Math.sin(theta);
         this.velocity[0][1] += 100 * Math.cos(theta);
         this.alive = false;
+        this.cushion = 0;
     }
 
     render() {
