@@ -10,7 +10,8 @@ let zoom = 1;
 let radius = 12;
 let drag = 0.9975;
 let actdur = 1500;
-let mutations = 5;
+let mutations = 10;
+let dorender = true;
 
 onload = onresize = e => {
     canvas.height = window.innerHeight - 8;

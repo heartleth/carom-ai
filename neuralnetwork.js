@@ -14,11 +14,13 @@ function LeakyReLU(z) {
 class Life {
     constructor(a, b, c) {
         this.input = new Float32Array(6);
-        this.input_bias = 10;
+        this.input_bias = 0
         this.hidden1 = new Float32Array(8);
-        this.hidden1_bias = 10;
+        this.hidden1_bias = 0;
         this.hidden2 = new Float32Array(8);
-        this.hidden2_bias = 10;
+        this.hidden2_bias = 0;
+        // this.hidden3 = new Float32Array(10);
+        // this.hidden3_bias = 10;
         this.output = new Float32Array(8);
 
         this.weights = [a, b, c];

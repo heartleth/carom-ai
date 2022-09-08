@@ -1,10 +1,10 @@
 function getRandomInt(min, max, p=2) {
     if (p==1){
         let r = Math.random();
-        if (r <= 0.7) {
+        if (r <= 0.70) {
             return 2;
         }
-        else if (r = 0.85) {
+        else if (r <= 0.85) {
             return 1;
         }
         else {
@@ -108,8 +108,10 @@ class Entity {
     }
 }
 
+let makenew = () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]);
+
 const worldsize = 128;
-let world = Array.from({ length: worldsize }, () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]));
+let world = Array.from({ length: worldsize }, makenew);
 
 for (let n = 0; n < worldsize; n++) {
     world[n].nth = n;
@@ -147,7 +149,8 @@ setInterval(() => {
                 randombetweenw(adam.map(e=>e.weights[1])),
                 randombetweenw(adam.map(e=>e.weights[2]))
             ]));
-            world = Array.from({ length: mutations }, () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]));
+            world = Array.from({ length: mutations - 3 }, makenew);
+            world = world.concat(adam);
             world = world.concat(childs);
             for (let n = 0; n < worldsize; n++) {
                 world[n].nth = n;
