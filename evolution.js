@@ -2,9 +2,12 @@ function getRandomInt(min, max, p=2) {
     if (p==1){
         let r = Math.random();
         if (r <= 0.70) {
+            return 3;
+        }
+        else if (r <= 0.80) {
             return 2;
         }
-        else if (r <= 0.85) {
+        else if (r <= 0.90) {
             return 1;
         }
         else {
@@ -25,9 +28,9 @@ class Entity {
     constructor(weights) {
         this.nth = 0;
         this.ballcoords = [
-            [getRandomInt(-100, 101), getRandomInt(-100, 101)],
-            [getRandomInt(-100, 101), getRandomInt(-100, 101)],
-            [getRandomInt(-100, 101), getRandomInt(-100, 101)]
+            [getRandomInt(-100, 101), getRandomInt(-200, 201)],
+            [getRandomInt(-100, 101), getRandomInt(-200, 201)],
+            [getRandomInt(-100, 101), getRandomInt(-200, 201)]
         ];
         this.velocity = [[0, 0], [0, 0], [0, 0]];
         this.weights = weights;
@@ -95,7 +98,7 @@ class Entity {
         // let out = this.life.most_output();
         // let theta = out * 5 / Math.PI;
         let out = this.life.binangle();
-        let theta = out * (2 * 3.1415926535897932 / 256);
+        let theta = out * (2 * 3.1415926535897932 / 512);
         
         this.velocity[0][0] -= 100 * Math.sin(theta);
         this.velocity[0][1] += 100 * Math.cos(theta);
@@ -108,7 +111,7 @@ class Entity {
     }
 }
 
-let makenew = () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([8, 8])]);
+let makenew = () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([9, 8])]);
 
 const worldsize = 128;
 let world = Array.from({ length: worldsize }, makenew);
@@ -121,14 +124,21 @@ let act = actdur;
 let gen = 0;
 let last = [];
 let acacts = 0;
+let scores = Array.from({ length: 60 }, ()=>0);
 let bests = Array.from({ length: worldsize }, (_, b) => b);
 
-function randombetween(a) {
+function randombetween(a, b) {
+    if (b == 1) {
     return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
+    }
+    else {
+        let r = getRandomInt(0, a.length, 1);
+        return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][r][i]));
+    }
 }
 
 function randombetweenw(ad) {
-    return Array.from({ length: ad[0].length }, (_, i) => randombetween(ad.map(e=>e[i])))
+    return Array.from({ length: ad[0].length }, (_, i) => randombetween(ad.map(e=>e[i]), Math.round(Math.random())))
 }
 
 let adams = [];
@@ -136,20 +146,22 @@ let adams = [];
 setInterval(() => {
     if (act >= actdur) {
         act = 0;
-        
         let dl = world.map((e, i)=>[e, i]).filter(e=>e[0].alive==true).map((a)=>a[1]);
         bests = bests.filter(e => !dl.includes(e)).concat(dl);
         if (dl.length == 0) {
+            scores = scores.slice(1);
+            scores.push(acacts);
+            drawGraph(scores, gen);
             gen += 1;
-            let adam = bests.slice(worldsize - 3).map(e=>world[e]);
-            adams = bests.slice(worldsize - 3);
+            let adam = bests.slice(worldsize - 4).map(e=>world[e]);
+            adams = bests.slice(worldsize - 4);
             
-            let childs = Array.from({ length: worldsize - mutations }, () => new Entity([
+            let childs = Array.from({ length: worldsize - mutations - 4}, () => new Entity([
                 randombetweenw(adam.map(e=>e.weights[0])),
                 randombetweenw(adam.map(e=>e.weights[1])),
                 randombetweenw(adam.map(e=>e.weights[2]))
             ]));
-            world = Array.from({ length: mutations - 3 }, makenew);
+            world = Array.from({ length: mutations }, makenew);
             world = world.concat(adam);
             world = world.concat(childs);
             for (let n = 0; n < worldsize; n++) {
@@ -165,9 +177,9 @@ setInterval(() => {
         acacts += 1;
     }
     else {
-        ctx.clearRect(0, 0, 9999, 9999);
         ctx.fillStyle = '#90d64f';
         for (let c of centers) {
+            ctx.clearRect(c[0] - 160 * zoom, c[1] - 310 * zoom, 320 * zoom, 620 * zoom);
             ctx.fillRect(c[0] - 150 * zoom, c[1] - 300 * zoom, 300 * zoom, 600 * zoom);
         }
         world.filter((e, i)=>last.includes(i)).forEach(e => e.tick());

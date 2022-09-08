@@ -10,12 +10,14 @@ let zoom = 1;
 let radius = 12;
 let drag = 0.9975;
 let actdur = 1500;
-let mutations = 10;
+let mutations = 8;
 let dorender = true;
+
+let center = [];
 
 onload = onresize = e => {
     canvas.height = window.innerHeight - 8;
-    let center = [ window.innerWidth / 2 - 4, window.innerHeight / 2 - 4 ];
+    center = [ window.innerWidth / 2 - 4, window.innerHeight / 2 - 4 ];
     
     // centers = [];
     // for (let i = 0; i < 2; i++) {

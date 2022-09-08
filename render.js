@@ -20,3 +20,24 @@ function render(ctx, balls, center, n, alive) {
         ctx.strokeText(n + (alive=='6' || alive==true?'*':''), center[0] + (balls[2][0] - 6) * zoom, center[1] - (balls[2][1]) * zoom);
     }
 }
+
+function drawGraph(tt, gen) {
+    ctx.clearRect(0, 2 * center[1] - 120, 2 * center[0], 120);
+    ctx.beginPath();
+    ctx.moveTo(0, center[1] * 2);
+    for (let i = 0; i < 60; i++) {
+        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 20);
+    }
+    ctx.lineTo(center[0] * 2, center[1] * 2);
+    ctx.fillStyle = '#0091ff';
+    ctx.fill();
+    
+    for (let i = 0; i < 60; i++) {
+        ctx.beginPath();
+        ctx.moveTo(center[0] * 2 * (i / 59), center[1] * 2);
+        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 20);
+        ctx.stroke();
+        ctx.strokeStyle = 'grey';
+        ctx.strokeText(gen - 59 + i + ', ' + tt[i], center[0] * 2 * (i / 59) - 8, center[1] * 2 - tt[i] * 20 - 10);
+    }
+}
