@@ -19,7 +19,7 @@ class Life {
         this.hidden1_bias = 1;
         this.hidden2 = new Float32Array(8);
         this.hidden2_bias = 1;
-        this.output = new Float32Array(9);
+        this.output = new Float32Array(12);
 
         this.weights = [a, b, c];
     }
@@ -38,7 +38,7 @@ class Life {
             }
             this.hidden2[i] = sigmoid(this.hidden2[i]);
         }
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 12; i++) {
             this.output[i] = this.hidden2_bias;
             for (let j = 0; j < 8; j++) {
                 this.output[i] += this.weights[2][i][j] * this.hidden2[j];
@@ -62,6 +62,10 @@ class Life {
     }
     
     binangle() {
-        return this.output.map(e => e > 0.2).map((e, i) => Math.pow(2, i) * e).reduce((a, b) => a + b);
+        return this.output.slice(0, 9).map(e => e > 0.5).map((e, i) => Math.pow(2, i) * e).reduce((a, b) => a + b);
+    }
+    
+    strength() {
+        return this.output.slice(9).map(e => e > 0.5).map((e, i) => Math.pow(2, i) * e).reduce((a, b) => a + b);
     }
 }

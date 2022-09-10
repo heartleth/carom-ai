@@ -22,7 +22,7 @@ function render(ctx, balls, center, n, alive) {
 }
 
 function drawGraph(tt, gen) {
-    ctx.clearRect(0, 2 * center[1] - 120, 2 * center[0], 120);
+    ctx.clearRect(0, 2 * center[1] - 500, 2 * center[0], 500);
     ctx.beginPath();
     ctx.moveTo(0, center[1] * 2);
     for (let i = 0; i < 60; i++) {

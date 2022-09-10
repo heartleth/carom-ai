@@ -28,9 +28,9 @@ class Entity {
     constructor(weights) {
         this.nth = 0;
         this.ballcoords = [
-            [getRandomInt(-100, 101), getRandomInt(-200, 201)],
-            [getRandomInt(-100, 101), getRandomInt(-200, 201)],
-            [getRandomInt(-100, 101), getRandomInt(-200, 201)]
+            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])],
+            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])],
+            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])]
         ];
         this.velocity = [[0, 0], [0, 0], [0, 0]];
         this.weights = weights;
@@ -69,6 +69,9 @@ class Entity {
                                 if (this.cushion >= 3) {
                                     this.alive = true;
                                 }
+                                else {
+                                    this.alive = 7;
+                                }
                             }
                             else if (this.alive == false) {
                                 this.alive = 3 * j;
@@ -98,10 +101,11 @@ class Entity {
         // let out = this.life.most_output();
         // let theta = out * 5 / Math.PI;
         let out = this.life.binangle();
+        let qstrength = this.life.strength() * 10 + 20;
         let theta = out * (2 * 3.1415926535897932 / 512);
-        
-        this.velocity[0][0] -= 100 * Math.sin(theta);
-        this.velocity[0][1] += 100 * Math.cos(theta);
+
+        this.velocity[0][0] = qstrength * Math.sin(theta);
+        this.velocity[0][1] = qstrength * Math.cos(theta);
         this.alive = false;
         this.cushion = 0;
     }
@@ -111,7 +115,7 @@ class Entity {
     }
 }
 
-let makenew = () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([9, 8])]);
+let makenew = () => new Entity([rrandomw([8, 6]), rrandomw([8, 8]), rrandomw([12, 8])]);
 
 const worldsize = 128;
 let world = Array.from({ length: worldsize }, makenew);
@@ -129,7 +133,7 @@ let bests = Array.from({ length: worldsize }, (_, b) => b);
 
 function randombetween(a, b) {
     if (b == 1) {
-    return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
+       return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
     }
     else {
         let r = getRandomInt(0, a.length, 1);
@@ -156,13 +160,15 @@ setInterval(() => {
             let adam = bests.slice(worldsize - 4).map(e=>world[e]);
             adams = bests.slice(worldsize - 4);
             
-            let childs = Array.from({ length: worldsize - mutations - 4}, () => new Entity([
+            let childs = Array.from({ length: worldsize - mutations - 20}, () => new Entity([
                 randombetweenw(adam.map(e=>e.weights[0])),
                 randombetweenw(adam.map(e=>e.weights[1])),
                 randombetweenw(adam.map(e=>e.weights[2]))
             ]));
             world = Array.from({ length: mutations }, makenew);
-            world = world.concat(adam);
+            for (let i = 0; i < 4; i++) {
+                world = world.concat([adam[0], adam[0], adam[1], adam[2], adam[3]]);
+            }
             world = world.concat(childs);
             for (let n = 0; n < worldsize; n++) {
                 world[n].nth = n;

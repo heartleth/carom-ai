@@ -9,9 +9,10 @@ let fp = 1;
 let zoom = 1;
 let radius = 12;
 let drag = 0.9975;
-let actdur = 1500;
+let actdur = 2000;
 let mutations = 8;
 let dorender = true;
+let spawnrange = [100, 200];
 
 let center = [];
 
