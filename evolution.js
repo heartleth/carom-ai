@@ -33,6 +33,7 @@ class Entity {
             [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])]
         ];
         this.velocity = [[0, 0], [0, 0], [0, 0]];
+        this.rolls = [[0, 0], [0, 0], [0, 0]];
         this.weights = weights;
         this.life = new Life(...this.weights);
         this.alive = true;
@@ -45,7 +46,9 @@ class Entity {
             this.ballcoords[i][1] += this.velocity[i][1] * fp / 16;
             if (Math.abs(this.ballcoords[i][0]) >= 150 - radius) {
                 this.ballcoords[i][0] = Math.sign(this.ballcoords[i][0]) * (150 - radius);
-                this.velocity[i][0] *= -1
+                this.velocity[i][0] *= -1;
+                this.rolls[i][0] *= 0.5;
+                this.rolls[i][1] *= 0.5;
                 if (i == 0) {
                     this.cushion += 1;
                 }
@@ -53,17 +56,28 @@ class Entity {
             if (Math.abs(this.ballcoords[i][1]) >= 300 - radius) {
                 this.ballcoords[i][1] = Math.sign(this.ballcoords[i][1]) * (300 - radius);
                 this.velocity[i][1] *= -1
+                this.rolls[i][0] *= 0.5;
+                this.rolls[i][1] *= 0.5;
                 if (i == 0) {
                     this.cushion += 1;
                 }
             }
-            this.velocity[i][0] *= Math.pow(drag, fp);
-            this.velocity[i][1] *= Math.pow(drag, fp);
+            
+            for (let l = 0; l < fp; l++) {
+                this.velocity[i][0] *= drag;
+                this.velocity[i][1] *= drag;
+                let spv = [this.velocity[i][0] - this.rolls[i][0], this.velocity[i][1] - this.rolls[i][1]];
+                
+                this.rolls[i][0] += spv[0] * fr;
+                this.rolls[i][1] += spv[1] * fr;
+        
+                this.velocity[i][0] -= spv[0] * fr;
+                this.velocity[i][1] -= spv[1] * fr;
+            }
 
             for (let j = 0; j < 3; j++) {
                 if (i != j) {
                     if (pythagorean(this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]) <= radius * 2){
-                        // emitsound(this.nth % 10);
                         if (i == 0) {
                             if (this.alive == 9 - 3 * j) {
                                 if (this.cushion >= 3) {
@@ -86,6 +100,8 @@ class Entity {
                         
                         this.velocity[j][0] += a[0] * cosav;
                         this.velocity[j][1] += a[1] * cosav;
+                        this.rolls[i][0] /= v;
+                        this.rolls[i][1] /= v
 
                         this.velocity[i][0] -= a[0] * cosav;
                         this.velocity[i][1] -= a[1] * cosav;
@@ -98,14 +114,13 @@ class Entity {
     shoot() {
         this.life.input_values(this.ballcoords[0].concat(this.ballcoords[1]).concat(this.ballcoords[2]));
         this.life.evaluate();
-        // let out = this.life.most_output();
-        // let theta = out * 5 / Math.PI;
         let out = this.life.binangle();
         let qstrength = this.life.strength() * 10 + 20;
         let theta = out * (2 * 3.1415926535897932 / 512);
 
         this.velocity[0][0] = qstrength * Math.sin(theta);
         this.velocity[0][1] = qstrength * Math.cos(theta);
+        this.rolls[0][0] = this.rolls[0][1] = 0;
         this.alive = false;
         this.cushion = 0;
     }
@@ -154,7 +169,7 @@ setInterval(() => {
         bests = bests.filter(e => !dl.includes(e)).concat(dl);
         if (dl.length == 0) {
             scores = scores.slice(1);
-            scores.push(acacts);
+            scores.push(acacts - 1);
             drawGraph(scores, gen);
             gen += 1;
             let adam = bests.slice(worldsize - 4).map(e=>world[e]);
@@ -183,7 +198,7 @@ setInterval(() => {
         acacts += 1;
     }
     else {
-        ctx.fillStyle = '#90d64f';
+        ctx.fillStyle = '#12a4ff';
         for (let c of centers) {
             ctx.clearRect(c[0] - 160 * zoom, c[1] - 310 * zoom, 320 * zoom, 620 * zoom);
             ctx.fillRect(c[0] - 150 * zoom, c[1] - 300 * zoom, 300 * zoom, 600 * zoom);

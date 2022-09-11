@@ -7,12 +7,16 @@ let velocity = [[0, 0], [0, 0], [0, 0]];
 
 let fp = 1;
 let zoom = 1;
-let radius = 12;
+
+let fr = 0;
+let radius = 9;
 let drag = 0.9975;
 let actdur = 2000;
+
 let mutations = 8;
-let dorender = true;
 let spawnrange = [100, 200];
+
+let dorender = true;
 
 let center = [];
 
