@@ -25,19 +25,19 @@ function drawGraph(tt, gen) {
     ctx.clearRect(0, 2 * center[1] - 500, 2 * center[0], 500);
     ctx.beginPath();
     ctx.moveTo(0, center[1] * 2);
-    for (let i = 0; i < 60; i++) {
-        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 8);
+    for (let i = 0; i < 200; i++) {
+        ctx.lineTo(center[0] * 2 * (i / 199), center[1] * 2 - tt[i] * 8);
     }
     ctx.lineTo(center[0] * 2, center[1] * 2);
     ctx.fillStyle = '#0091ff';
     ctx.fill();
     
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 200; i++) {
         ctx.beginPath();
-        ctx.moveTo(center[0] * 2 * (i / 59), center[1] * 2);
-        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 8);
+        ctx.moveTo(center[0] * 2 * (i / 199), center[1] * 2);
+        ctx.lineTo(center[0] * 2 * (i / 199), center[1] * 2 - tt[i] * 8);
         ctx.stroke();
         ctx.strokeStyle = 'grey';
-        ctx.strokeText(gen - 59 + i + ', ' + tt[i], center[0] * 2 * (i / 59) - 8, center[1] * 2 - tt[i] * 8 - 10);
+        ctx.strokeText(gen - 199 + i + ', ' + tt[i], center[0] * 2 * (i / 199) - 8, center[1] * 2 - tt[i] * 8 - 10);
     }
 }
