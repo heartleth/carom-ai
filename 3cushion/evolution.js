@@ -28,9 +28,9 @@ class Entity {
     constructor(weights) {
         this.nth = 0;
         this.ballcoords = [
-            [40, 100],
-            [0, 125],
-            [0, -125]
+            [40, 150],
+            [0, 150],
+            [0, -150]
         ];
         this.velocity = [[0, 0], [0, 0], [0, 0]];
         this.rolls = [[0, 0], [0, 0], [0, 0]];
