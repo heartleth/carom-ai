@@ -1,13 +1,13 @@
 function getRandomInt(min, max, p=2) {
     if (p==1){
         let r = Math.random();
-        if (r <= 0.70) {
+        if (r <= 0.40) {
             return 3;
         }
-        else if (r <= 0.80) {
+        if (r <= 0.60) {
             return 2;
         }
-        else if (r <= 0.90) {
+        else if (r <= 0.60) {
             return 1;
         }
         else {
@@ -41,70 +41,70 @@ class Entity {
     }
     
     tick() {
-        for (let i = 0; i < 3; i++) {
-            this.ballcoords[i][0] += this.velocity[i][0] * fp / 16;
-            this.ballcoords[i][1] += this.velocity[i][1] * fp / 16;
-            if (Math.abs(this.ballcoords[i][0]) >= 150 - radius) {
-                this.ballcoords[i][0] = Math.sign(this.ballcoords[i][0]) * (150 - radius);
-                this.velocity[i][0] *= -1;
-                this.rolls[i][0] *= 0.5;
-                this.rolls[i][1] *= 0.5;
-                if (i == 0) {
-                    this.cushion += 1;
+        for (let l = 0; l < fp; l++) {
+            for (let i = 0; i < 3; i++) {
+                this.ballcoords[i][0] += this.velocity[i][0];
+                this.ballcoords[i][1] += this.velocity[i][1];
+                if (Math.abs(this.ballcoords[i][0]) >= 150 - radius) {
+                    this.ballcoords[i][0] = Math.sign(this.ballcoords[i][0]) * (150 - radius);
+                    this.velocity[i][0] *= -1;
+                    this.rolls[i][0] *= 0.5;
+                    this.rolls[i][1] *= 0.5;
+                    if (i == 0) {
+                        this.cushion += 1;
+                    }
                 }
-            }
-            if (Math.abs(this.ballcoords[i][1]) >= 300 - radius) {
-                this.ballcoords[i][1] = Math.sign(this.ballcoords[i][1]) * (300 - radius);
-                this.velocity[i][1] *= -1
-                this.rolls[i][0] *= 0.5;
-                this.rolls[i][1] *= 0.5;
-                if (i == 0) {
-                    this.cushion += 1;
+                if (Math.abs(this.ballcoords[i][1]) >= 300 - radius) {
+                    this.ballcoords[i][1] = Math.sign(this.ballcoords[i][1]) * (300 - radius);
+                    this.velocity[i][1] *= -1
+                    this.rolls[i][0] *= 0.5;
+                    this.rolls[i][1] *= 0.5;
+                    if (i == 0) {
+                        this.cushion += 1;
+                    }
                 }
-            }
-            
-            for (let l = 0; l < fp; l++) {
+
                 this.velocity[i][0] *= drag;
                 this.velocity[i][1] *= drag;
                 let spv = [this.velocity[i][0] - this.rolls[i][0], this.velocity[i][1] - this.rolls[i][1]];
-                
+
                 this.rolls[i][0] += spv[0] * fr;
                 this.rolls[i][1] += spv[1] * fr;
-        
+
                 this.velocity[i][0] -= spv[0] * fr;
                 this.velocity[i][1] -= spv[1] * fr;
-            }
 
-            for (let j = 0; j < 3; j++) {
-                if (i != j) {
-                    if (pythagorean(this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]) <= radius * 2){
-                        if (i == 0) {
-                            if (this.alive == 9 - 3 * j) {
-                                if (this.cushion >= 3) {
-                                    this.alive = true;
+                for (let j = 0; j < 3; j++) {
+                    if (i != j) {
+                        if (pythagorean(this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]) <= radius * 2){
+                            if (i == 0) {
+                                if (this.alive == 9 - 3 * j) {
+                                    if (this.cushion >= 3) {
+                                        this.alive = true;
+                                    }
+                                    else {
+                                        this.alive = 7;
+                                    }
                                 }
-                                else {
-                                    this.alive = 7;
+                                else if (this.alive == false) {
+                                    this.alive = 3 * j;
                                 }
                             }
-                            else if (this.alive == false) {
-                                this.alive = 3 * j;
-                            }
+                            let a = [this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]];
+                            let d = pythagorean(...a);
+                            this.ballcoords[j][0] = this.ballcoords[i][0] + a[0] * (radius * 2 / d);
+                            this.ballcoords[j][1] = this.ballcoords[i][1] + a[1] * (radius * 2 / d);
+                            let v = pythagorean(...this.velocity[i]);
+                            let cosav = (a[0]*this.velocity[i][0]+a[1]*this.velocity[i][1]) / (radius * radius * 4);
+
+                            this.velocity[j][0] += a[0] * cosav;
+                            this.velocity[j][1] += a[1] * cosav;
+                            this.rolls[i][0] /= v;
+                            this.rolls[i][1] /= v
+
+                            this.velocity[i][0] -= a[0] * cosav;
+                            this.velocity[i][1] -= a[1] * cosav;
                         }
-                        let a = [this.ballcoords[j][0] - this.ballcoords[i][0], this.ballcoords[j][1] - this.ballcoords[i][1]];
-                        let d = pythagorean(...a);
-                        this.ballcoords[j][0] = this.ballcoords[i][0] + a[0] * (radius * 2 / d);
-                        this.ballcoords[j][1] = this.ballcoords[i][1] + a[1] * (radius * 2 / d);
-                        let v = pythagorean(...this.velocity[i]);
-                        let cosav = (a[0]*this.velocity[i][0]+a[1]*this.velocity[i][1]) / (radius * radius * 4);
-                        
-                        this.velocity[j][0] += a[0] * cosav;
-                        this.velocity[j][1] += a[1] * cosav;
-                        this.rolls[i][0] /= v;
-                        this.rolls[i][1] /= v
-
-                        this.velocity[i][0] -= a[0] * cosav;
-                        this.velocity[i][1] -= a[1] * cosav;
                     }
                 }
             }
@@ -115,7 +115,7 @@ class Entity {
         this.life.input_values(this.ballcoords[0].concat(this.ballcoords[1]).concat(this.ballcoords[2]));
         this.life.evaluate();
         let out = this.life.binangle();
-        let qstrength = this.life.strength() * 10 + 20;
+        let qstrength = this.life.strength() * 3 + 1;
         let theta = out * (2 * 3.1415926535897932 / 512);
 
         this.velocity[0][0] = qstrength * Math.sin(theta);
