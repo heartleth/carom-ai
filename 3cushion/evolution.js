@@ -186,13 +186,15 @@ setInterval(() => {
                 randombetweenw(adam.map(e=>e.weights[2]))
             ]));
             world = Array.from({ length: mutations }, makenew);
-            world = world.concat([
+            for (let j = 0; j < 4; j++) {
+                world = world.concat([
                     new Entity(adam[0].weights),
                     new Entity(adam[0].weights),
                     new Entity(adam[1].weights),
                     new Entity(adam[2].weights),
                     new Entity(adam[3].weights)
                 ]);
+            }
             world = world.concat(childs);
             for (let n = 0; n < worldsize; n++) {
                 world[n].nth = n;
