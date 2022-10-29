@@ -147,12 +147,17 @@ let scores = Array.from({ length: 60 }, ()=>0);
 let bests = Array.from({ length: worldsize }, (_, b) => b);
 
 function randombetween(a, b) {
-    if (b == 1) {
-       return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
+    if (Math.random() < 0.05) {
+        return randomw(a[0].length);
     }
     else {
-        let r = getRandomInt(0, a.length, 1);
-        return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][r][i]));
+        if (b == 1) {
+            return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][getRandomInt(0, a.length, 1)][i]));
+        }
+        else {
+            let r = getRandomInt(0, a.length, 1);
+            return Float32Array.from(Array.from({ length: a[0].length }, (_, i) => [...a][r][i]));
+        }
     }
 }
 
