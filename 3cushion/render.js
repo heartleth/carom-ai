@@ -26,7 +26,7 @@ function drawGraph(tt, gen) {
     ctx.beginPath();
     ctx.moveTo(0, center[1] * 2);
     for (let i = 0; i < 60; i++) {
-        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 20);
+        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 8);
     }
     ctx.lineTo(center[0] * 2, center[1] * 2);
     ctx.fillStyle = '#0091ff';
@@ -35,9 +35,9 @@ function drawGraph(tt, gen) {
     for (let i = 0; i < 60; i++) {
         ctx.beginPath();
         ctx.moveTo(center[0] * 2 * (i / 59), center[1] * 2);
-        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 20);
+        ctx.lineTo(center[0] * 2 * (i / 59), center[1] * 2 - tt[i] * 8);
         ctx.stroke();
         ctx.strokeStyle = 'grey';
-        ctx.strokeText(gen - 59 + i + ', ' + tt[i], center[0] * 2 * (i / 59) - 8, center[1] * 2 - tt[i] * 20 - 10);
+        ctx.strokeText(gen - 59 + i + ', ' + tt[i], center[0] * 2 * (i / 59) - 8, center[1] * 2 - tt[i] * 8 - 10);
     }
 }
