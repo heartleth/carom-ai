@@ -38,6 +38,6 @@ function drawGraph(tt, gen) {
         ctx.lineTo(center[0] * 2 * (i / 199), center[1] * 2 - tt[i] * 8);
         ctx.stroke();
         ctx.strokeStyle = 'grey';
-        ctx.strokeText(gen - 199 + i + ', ' + tt[i], center[0] * 2 * (i / 199) - 8, center[1] * 2 - tt[i] * 8 - 10);
+        // ctx.strokeText(gen - 199 + i + ', ' + tt[i], center[0] * 2 * (i / 199) - 8, center[1] * 2 - tt[i] * 8 - 10);
     }
 }
