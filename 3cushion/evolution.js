@@ -143,7 +143,7 @@ let act = actdur;
 let gen = 0;
 let last = [];
 let acacts = 0;
-let scores = Array.from({ length: 60 }, ()=>0);
+let scores = Array.from({ length: 200 }, ()=>0);
 let bests = Array.from({ length: worldsize }, (_, b) => b);
 
 function randombetween(a, b) {
