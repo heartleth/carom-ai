@@ -198,7 +198,7 @@ setInterval(() => {
         }
         last = dl;
         
-        output.innerText = last.join(' ') + '\nSUP ' + bests.join(' ') + `\nSUCCEEDING ${adams.join(' ')}\n# GEN ${gen} \n` + `# SCORE ${acacts}`;
+        output.innerText = last.join(' ') + `\nSUCCEEDING ${adams.join(' ')}\n# GEN ${gen} \n` + `# SCORE ${acacts}`;
         world.filter((e, i)=>last.includes(i)).forEach(e=>e.shoot());
         acacts += 1;
     }
