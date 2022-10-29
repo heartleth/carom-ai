@@ -28,9 +28,9 @@ class Entity {
     constructor(weights) {
         this.nth = 0;
         this.ballcoords = [
-            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])],
-            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])],
-            [getRandomInt(-spawnrange[0], spawnrange[0]), getRandomInt(-spawnrange[1], spawnrange[1])]
+            [40, 100],
+            [0, 125],
+            [0, -125]
         ];
         this.velocity = [[0, 0], [0, 0], [0, 0]];
         this.rolls = [[0, 0], [0, 0], [0, 0]];
