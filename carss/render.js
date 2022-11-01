@@ -8,25 +8,25 @@ let dpos = [
 ];
 
 function drawBall(ctx, color, pos, v, s, ar) {
-    // if (v) {
-    //     let pv = pythagorean(v[0], v[1]);
-    //     ctx.lineWidth = 3;
-    //     ctx.strokeStyle = 'blue';
-    //     ctx.beginPath();
-    //     ctx.moveTo(...pos);
-    //     let adf = (pv * 10 + 9 * zoom) / (pv * 10);
-    //     ctx.lineTo(pos[0] + adf * v[0] * 10, pos[1] - adf * v[1] * 10);
-    //     ctx.stroke();
+    if (v) {
+        let pv = pythagorean(v[0], v[1]);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'blue';
+        ctx.beginPath();
+        ctx.moveTo(...pos);
+        let adf = (pv * 10 + 9 * zoom) / (pv * 10);
+        ctx.lineTo(pos[0] + adf * v[0] * 10, pos[1] - adf * v[1] * 10);
+        ctx.stroke();
 
-    //     let ps = pythagorean(s[0], s[1]);
-    //     ctx.lineWidth = 3;
-    //     ctx.strokeStyle = 'green';
-    //     ctx.beginPath();
-    //     ctx.moveTo(...pos);
-    //     let asf = (ps * 10 + 9 * zoom) / (ps * 10);
-    //     ctx.lineTo(pos[0] + asf * s[0] * 10, pos[1] - asf * s[1] * 10);
-    //     ctx.stroke();
-    // }
+        let ps = pythagorean(s[0], s[1]);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'green';
+        ctx.beginPath();
+        ctx.moveTo(...pos);
+        let asf = (ps * 10 + 9 * zoom) / (ps * 10);
+        ctx.lineTo(pos[0] + asf * s[0] * 10, pos[1] - asf * s[1] * 10);
+        ctx.stroke();
+    }
 
     ctx.fillStyle = color;
     ctx.beginPath();
