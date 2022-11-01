@@ -25,7 +25,7 @@ setInterval(() => {
 });
 
 setInterval(() => {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
         ballcoords[i][0] += velocity[i][0];
         ballcoords[i][1] += velocity[i][1];
         accrolls[i][0] += rolls[i][0];
@@ -54,7 +54,7 @@ setInterval(() => {
         velocity[i][0] -= spv[0] * fr;
         velocity[i][1] -= spv[1] * fr;
      
-        for (let j = 0; j < 4; j++) {
+        for (let j = 0; j < 3; j++) {
             if (i != j) {
                 if (pythagorean(ballcoords[j][0] - ballcoords[i][0], ballcoords[j][1] - ballcoords[i][1]) <= 20){
                     let a = [ballcoords[j][0] - ballcoords[i][0], ballcoords[j][1] - ballcoords[i][1]];
